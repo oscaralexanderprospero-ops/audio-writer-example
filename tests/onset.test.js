@@ -1,0 +1,4 @@
+const t=require('node:test'),a=require('node:assert/strict'),H=require('../app/src/main/assets/onset-history');
+t('onset uses historical sentence instead of later recognition-completion position',()=>{let h=[{atMs:100,sentenceId:'one',versionId:'v'},{atMs:200,sentenceId:'two',versionId:'v'},{atMs:300,sentenceId:'three',versionId:'v'}];let r=H.atOnset(h,220);a.equal(r.anchor.sentenceId,'two');a.equal(r.previous.sentenceId,'one');a.equal(r.requiresConfirmation,true);h[1].sentenceId='changed';a.equal(r.anchor.sentenceId,'two');});
+t('missing history, boundary and bad timing are handled explicitly',()=>{a.equal(H.atOnset([{atMs:100}],99).status,'unanchored');a.equal(H.atOnset([{atMs:100,sentenceId:'a'},{atMs:200,sentenceId:'b'}],200).anchor.sentenceId,'b');a.throws(()=>H.atOnset([{atMs:200},{atMs:100}],300));a.throws(()=>H.atOnset([],NaN));});
+

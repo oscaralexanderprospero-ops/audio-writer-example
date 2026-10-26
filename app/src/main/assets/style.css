@@ -1,0 +1,102 @@
+/* Audio Writer: the Control Room's look (its colours, type and buttons), for a phone. Claude, 24 Oct 2026. */
+:root {
+  --bg: #f4eee2; --panel: #fffaf1; --ink: #2a241c; --muted: #6d604e;
+  --line: #ddd1bb; --moss: #4d6a38; --moss-soft: #e3ead8; --rust: #9a4a2c;
+  --rust-soft: #f6e2d8; --amber: #8a6512; --amber-soft: #f7ecd0; --sky: #2f5d73;
+  --gold: #c9a45c; --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #1b1814; --panel: #24201a; --ink: #eee5d4; --muted: #b3a58e;
+    --line: #3c342a; --moss: #9fbf82; --moss-soft: #2b3325; --rust: #e39a7c;
+    --rust-soft: #3a261e; --amber: #e2c070; --amber-soft: #352c19; --sky: #8cc1d8; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.55 system-ui, "Segoe UI", sans-serif; }
+a { color: var(--sky); }
+header.top { background: var(--panel); border-bottom: 3px solid var(--gold); padding: .6rem 1rem;
+  position: sticky; top: 0; z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; }
+.brand { font: 600 1.25rem Georgia, serif; margin-right: auto; }
+.strip { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: .3rem .9rem; font-size: .9rem; color: var(--muted); }
+.micstate { font-weight: 600; }
+main { max-width: 52rem; margin: 0 auto; padding: .8rem .8rem 4rem; }
+h1, h2 { font: 600 1.2rem Georgia, serif; margin: .2rem 0 .6rem; }
+h3 { font: 600 1.05rem Georgia, serif; margin: 1rem 0 .4rem; }
+.lead { color: var(--muted); margin: .2rem 0 .6rem; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: .9rem 1rem; margin: .8rem 0; }
+details.card > summary { font: 600 1.05rem Georgia, serif; cursor: pointer; min-height: 2.4rem; }
+.src { color: var(--muted); font-size: .85rem; }
+label, .label { display: block; font-weight: 600; margin: .5rem 0 .3rem; }
+textarea, input { font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line);
+  border-radius: 8px; padding: .6rem .7rem; width: 100%; }
+textarea { min-height: 14rem; resize: vertical; line-height: 1.6; }
+textarea.short { min-height: 5rem; }
+button { font: inherit; background: var(--moss); color: var(--panel); border: 0; border-radius: 8px;
+  padding: .6rem 1rem; margin: .25rem .25rem .25rem 0; min-height: 48px; cursor: pointer; }
+button.quiet { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+button.rec { background: var(--rust); }
+button:disabled { opacity: .45; }
+button:focus-visible, textarea:focus-visible, summary:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+.bigbtns { display: flex; flex-wrap: wrap; gap: .2rem; margin-top: .4rem; }
+.bigbtns button { flex: 1 1 8rem; font-size: 1.05rem; }
+.row { display: flex; flex-wrap: wrap; }
+.choices button { display: block; width: 100%; text-align: left; background: var(--moss-soft); color: var(--moss); }
+/* the text being read, and the words being recorded, side by side */
+.twocol { display: flex; gap: .6rem; align-items: stretch; }
+.col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; }
+.col textarea { flex: 1; }
+.livewords { flex: 1; min-height: 14rem; background: var(--moss-soft); border: 1px solid var(--line); border-radius: 8px;
+  padding: .6rem .7rem; overflow-y: auto; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
+.livewords .partial { color: var(--muted); font-style: italic; }
+.livewords .idle { color: var(--muted); }
+@media (max-width: 330px) { .twocol { flex-direction: column; } }
+#notes > * { border-top: 1px solid var(--line); padding-top: .4rem; }
+pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+.helpbtn { min-height: 40px; padding: .3rem .9rem; margin: 0; }
+/* the step-by-step tour, as in the Control Room */
+.tour { position: fixed; inset: auto .8rem .8rem .8rem; z-index: 50; max-width: 26rem; margin-left: auto; }
+.tourbox { background: var(--panel); border: 2px solid var(--moss); border-radius: 12px; padding: 1rem;
+  box-shadow: 0 8px 30px rgba(0,0,0,.25); font-size: 1.05rem; }
+.tourbtns { display: flex; gap: .4rem; justify-content: flex-end; align-items: center; margin-top: .8rem; }
+.tourbtns .src { margin-right: auto; }
+.tour-hl { outline: 4px solid var(--amber); outline-offset: 4px; border-radius: 8px; position: relative; z-index: 40; }
+/* deleting and cutting notes */
+button.del { color: var(--rust); border-color: var(--rust); }
+button.del.armed { background: var(--rust); color: var(--panel); }
+.trash { margin-top: 1rem; border-top: 1px solid var(--line); padding-top: .6rem; }
+.trash summary { font-weight: 600; cursor: pointer; min-height: 2.4rem; }
+.gone { border-top: 1px solid var(--line); padding: .4rem 0; }
+/* notes beside the writing */
+.annotated { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: .35rem .6rem; }
+.annotated .atext { grid-column: 1; padding: .3rem .5rem; border-radius: 6px; cursor: pointer; line-height: 1.55; }
+.annotated .atext.solo { grid-column: 1 / -1; }
+.annotated .atext.now { background: var(--amber-soft); }
+.annotated .anotes { grid-column: 2; display: flex; flex-direction: column; gap: .3rem; }
+.annotated .apiece { background: var(--moss-soft); border-left: 3px solid var(--moss); border-radius: 6px; padding: .3rem .5rem; font-size: .92rem; overflow-wrap: anywhere; }
+.annotated .apiece.typed { border-left-color: var(--sky); }
+.annotated .apiece.live { color: var(--muted); font-style: italic; }
+.annotated .apiece .src { display: block; }
+.annotated .apiece:not(.live) { cursor: pointer; }
+.annotated .apiece.editing { background: var(--panel); border-left-color: var(--amber); }
+.annotated h3 { grid-column: 1 / -1; }
+.annotated .wide { grid-column: 1 / -1; }
+/* read along: the text being read scrolls itself, the sentence and word being heard are lit */
+.reader { flex: 1; min-height: 14rem; max-height: 60vh; overflow-y: auto; scroll-behavior: smooth; background: var(--bg);
+  border: 1px solid var(--line); border-radius: 8px; padding: .6rem .7rem; line-height: 1.7; }
+.reader .rs { cursor: pointer; border-radius: 4px; }
+.reader .rs.pstart::before { content: ""; display: block; height: .7em; }
+.reader .rs.now { background: var(--amber-soft); }
+.reader .rs mark { background: var(--amber); color: var(--panel); border-radius: 3px; padding: 0 .1em; }
+/* scroll and talk: he scrolls; the sentence on the reading line is lit and his words attach to it */
+.reader.readline { border: 2px solid var(--amber); }
+button.on { background: var(--amber); color: var(--panel); border-color: var(--amber); }
+/* spoken commands */
+details.card > summary { list-style-position: inside; }
+.cmds { margin: .4rem 0 .2rem 1.1rem; padding: 0; line-height: 1.6; }
+.cmds b { color: var(--moss); }
+/* one Start button */
+button.start { background: var(--moss); font-weight: 600; }
+button.start.running { background: var(--rust); }
+/* speed and text size */
+.speedlabel { align-self: center; padding: 0 .4rem; font-weight: 600; color: var(--muted); white-space: nowrap; }
+textarea#draft, .reader, .annotated, .livewords { font-size: calc(1rem * var(--text-scale, 1)); }

@@ -1,0 +1,52 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'none'"><title>Audio Writer</title>
+<link rel="stylesheet" href="style.css">
+<header class="top"><span class="brand">Audio Writer</span><button id="helpbtn" class="quiet helpbtn" type="button">Help</button>
+<div class="strip"><span id="status" role="status" aria-live="polite" data-tour="status">Ready</span><span id="mic" role="status" class="micstate">Microphone closed</span></div></header>
+<main>
+<p class="lead">Your writing, read aloud. Your spoken notes, kept beside it. Your writings and approvals stay in the Control Room.</p>
+
+<section id="omsLive" class="card" data-tour="oms"><h2>My writings</h2><p id="omsState" role="status" class="src"></p>
+<button id="omsList" class="quiet">↻ Refresh the list</button><div id="omsWritings" class="choices"></div>
+<button id="omsSend" class="quiet" data-tour="send">Send my notes to the Control Room</button>
+<p class="src">Sends your notes and your edited text. They wait beside the writing for Claude, Zephyr and you. Nothing is changed or published until you choose.</p></section>
+
+<section class="card" data-tour="reading">
+<div class="twocol">
+ <div class="col"><label for="draft" id="draftLabel">Being read (you can edit it)</label><textarea id="draft"></textarea><div id="reader" class="reader" hidden aria-live="off"></div></div>
+ <div class="col" data-tour="live"><span class="label">Words being recorded</span><div id="liveWords" class="livewords" aria-live="polite"></div></div>
+</div>
+<p id="position" class="src"></p>
+<div class="bigbtns" data-tour="scrollmode"><button id="scrollMode" class="quiet">📖 Scroll and talk (no reading aloud)</button></div>
+<p id="scrollHint" class="src" hidden>Scroll the text yourself and talk. Your words attach to the lit sentence: the one a third of the way down the box.</p>
+<div class="bigbtns" data-tour="controls"><button id="startAll" class="start">▶ Start</button><button id="pause" class="quiet">❚❚ Pause reading</button><button id="stopAll" class="quiet">■ Stop</button></div>
+<div class="bigbtns" data-tour="move"><button id="prevSentence" class="quiet">⏮ Back</button><button id="replay" class="quiet">↺ Replay</button><button id="nextSentence" class="quiet">⏭ Next</button></div>
+<div class="bigbtns" data-tour="speed"><button id="slower" class="quiet">🐢 Slower</button><span id="speedLabel" class="speedlabel">Speed 100%</span><button id="faster" class="quiet">🐇 Faster</button><button id="textSmaller" class="quiet" aria-label="Smaller text">A−</button><button id="textBigger" class="quiet" aria-label="Bigger text">A+</button></div>
+<div class="bigbtns" data-tour="extra"><button id="flag" class="quiet">⚑ Flag this sentence</button><button id="readBack" class="quiet">🔊 Read my last note</button><button id="undoLast" class="quiet">↩ Undo</button></div>
+<div hidden><button id="play">Read / resume</button><button id="record">Start audio note</button><button id="mute">Finish note</button></div>
+<div class="bigbtns" data-tour="fix"><button id="cut30" class="quiet">↶ Cut last 30 s</button><button id="cut60" class="quiet">↶ Cut last minute</button><button id="retry" class="quiet del">✕ Scrap note &amp; retry</button><button id="startOver" class="quiet del">⟲ Start over</button><button id="wipe" class="quiet del">🗑 Delete all progress</button></div>
+<div class="row"><button id="save" class="quiet" data-tour="save">Save new local version</button><button id="undo" class="quiet">Previous local version</button></div>
+<p class="src">Narration continues while recording. Recording lasts until you close the microphone or leave the app. Offline English transcription source is integrated; native build and phone validation pending. Sound-onset candidates are detected from PCM energy and matched to narration history; noise can trigger candidates, so confirm their passage. Typed corrections are manual, not machine transcripts. Headphones recommended. Background recording is disabled.</p>
+</section>
+
+<details class="card" data-tour="voice" id="voiceCard"><summary>🗣 Spoken commands</summary><p class="src">They work while an audio note is recording. Say the command on its own, with a short pause before and after. You can start with “writer”, for example “writer, pause”. Commands are not saved as notes.</p><ul class="cmds"><li><b>pause</b> or <b>stop reading</b>: pause the reading (the microphone stays on)</li><li><b>keep reading</b>, <b>continue</b> or <b>read</b>: start or carry on reading</li><li><b>go back</b>: the sentence before · <b>repeat</b>: this sentence again · <b>next</b>: the next sentence</li><li><b>next paragraph</b> · <b>previous paragraph</b></li><li><b>scratch that</b>: delete the last thing you said (the recording is kept)</li><li><b>cut thirty seconds</b> · <b>cut last minute</b>: cut words and recording, then keep recording</li><li><b>new note</b>: finish this note and start the next one</li><li><b>send my notes</b>: send to the Control Room</li><li><b>start over</b>: back to the first sentence, this writing's notes go to Deleted notes (you can restore them), and a fresh note starts</li><li><b>faster</b> · <b>slower</b> · <b>normal speed</b>: reading speed</li><li><b>bigger text</b> · <b>smaller text</b></li><li><b>flag this</b>: mark this sentence to come back to</li><li><b>read that back</b>: hear the last thing you said</li><li><b>undo that</b>: undo the last scratch, cut or flag</li></ul><p class="src">A short beep means a command was heard. Two beeps mean a bigger change, such as start over.</p><p id="lastCommand" class="src" role="status"></p></details>
+
+<section class="card" data-tour="beside"><h2>Your notes beside the writing</h2><p class="src">Each piece of what you said sits next to the sentence that was being read when you said it. Tap a sentence to read from there. Tap a block of your words to edit or delete it.</p><div id="annotated" class="annotated"></div></section>
+
+<section class="card" data-tour="notes"><h2>Notes</h2>
+<label for="note">Type a note</label><textarea id="note" class="short"></textarea><button id="add">Add note</button>
+<h3>Saved notes</h3><button id="stopNote" class="quiet">Stop saved note playback</button><div id="notes"></div>
+<details id="deletedBox" class="trash" hidden><summary id="deletedSummary">Deleted notes</summary><p class="src">Restore brings a note and its recording back. Delete for good removes the recording from the phone. Notes already sent stay in the Control Room.</p><div id="deletedNotes"></div></details></section>
+
+<details class="card" data-tour="byhand"><summary>Review by hand (copy and paste)</summary>
+<section><h2>Review exchange</h2><p class="src">Both Zephyr and Claude are requested. No provider calls or simulated responses. Imported reviewer names are claims, not authenticated identities. All results remain local proposals; nothing is published or approved in OMS.</p><button id="export" class="quiet">Prepare review request</button><label for="exchange">Review packet (copy out) / reviewer response (paste in)</label><textarea id="exchange"></textarea><button id="import" class="quiet">Validate and import proposal</button><div id="reviews"></div><h3>Explicit review round</h3><p class="src">Export this round to both reviewers. Import each real response with its requestId. Local preview requires both responses and your choice; it does not approve anything in OMS.</p><button id="beginRound" class="quiet">Freeze instructions and export review round</button><button id="cancelRound" class="quiet">Cancel current round</button><button id="previewClaude" class="quiet">Make local preview of Claude proposal</button><button id="previewZephyr" class="quiet">Make local preview of Zephyr proposal</button><p id="roundStatus" role="status" class="src"></p></section>
+<section><h2>OMS offline handoff</h2><p class="src">Draft protocol: pasted snapshots and receipts are unverified; only use packets you obtained from your Control Room. Receipt means received for review, never approval.</p><button id="loadOms" class="quiet">Load pasted OMS snapshot as a new local copy</button><button id="queueOms" class="quiet">Queue review for OMS / export retry packet</button><button id="receiptOms" class="quiet">Validate pasted OMS receipt</button><p id="outboxStatus" role="status" class="src"></p></section>
+</details>
+</main>
+<div id="tour" class="tour" hidden role="dialog" aria-live="polite">
+  <div class="tourbox"><div id="tourtext"></div>
+    <div class="tourbtns"><span id="tourstep" class="src"></span>
+      <button type="button" class="quiet" id="tourskip">Skip</button>
+      <button type="button" class="quiet" id="tourback">Back</button>
+      <button type="button" id="tournext">Next</button></div></div>
+</div>
+<script src="voice-onset.js"></script><script src="onset-history.js"></script><script src="oms-outbox.js"></script><script src="oms-adapter.js"></script><script src="core.js"></script><script src="transcript.js"></script><script src="review-round.js"></script><script src="journal-replay.js"></script><script src="ui.js"></script><script src="tour.js"></script></html>

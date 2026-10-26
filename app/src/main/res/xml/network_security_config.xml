@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Claude, 24 Oct 2026: plain HTTP only to Author' laptop on his Tailscale network (WireGuard-encrypted;
+     HTTPS certificates are off on his tailnet). Everything else stays HTTPS-only. -->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false" />
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">example.invalid</domain>
+    </domain-config>
+</network-security-config>

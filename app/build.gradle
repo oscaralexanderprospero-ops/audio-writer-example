@@ -1,0 +1,8 @@
+plugins { id 'com.android.application' }
+android {
+ namespace 'local.audiowriter'
+ compileSdk 35
+ defaultConfig { applicationId 'local.audiowriter'; minSdk 26; targetSdk 35; versionCode 15; versionName '0.15' }
+}
+
+dependencies { implementation files('libs/vosk-android-0.3.75.aar', 'libs/jna-5.18.1.aar') }
